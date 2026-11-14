@@ -3,6 +3,7 @@ export interface TheoryStepData {
   title: string;
   explanation: string;
   example: string;
+  hint?: string;
 }
 
 export interface FillBlankStepData {
@@ -14,6 +15,7 @@ export interface FillBlankStepData {
   blanks: string[];
   /** Token bank shown to the student — includes the correct answers plus distractors. */
   options: string[];
+  hint?: string;
 }
 
 export interface PredictStepData {
@@ -22,6 +24,7 @@ export interface PredictStepData {
   code: string;
   choices: string[];
   correctIndex: number;
+  hint?: string;
 }
 
 export interface SpotBugStepData {
@@ -31,6 +34,7 @@ export interface SpotBugStepData {
   /** 1-indexed line number containing the bug. */
   bugLine: number;
   fixedLine: string;
+  hint?: string;
 }
 
 export interface MiniIdeStepData {
@@ -41,6 +45,7 @@ export interface MiniIdeStepData {
   assertion: string;
   /** Optional mocked input() value, for levels that read from stdin. */
   stdin?: string;
+  hint?: string;
 }
 
 export type LessonStepData =

@@ -14,6 +14,7 @@ import MiniIdeStep from "@/components/lesson/MiniIdeStep";
 import SignInModal from "@/components/modals/SignInModal";
 import { getLevelById, getNextLevel } from "@/lib/levels";
 import { getStepsForLevel } from "@/lib/lessonSteps";
+import { getHintForStep } from "@/lib/hints";
 import { useLessonStore } from "@/store/useLessonStore";
 import { useGameStore } from "@/store/useGameStore";
 import { useUserStore } from "@/store/useUserStore";
@@ -210,11 +211,22 @@ export default function LessonPage() {
 
         {/* Hint Revelation Card */}
         {hintOpen && (
-          <div className="flex items-start gap-3 rounded-2xl border border-amber-500/30 bg-amber-950/30 p-4 text-sm text-amber-200">
-            <Lightbulb size={18} className="mt-0.5 shrink-0 text-amber-400" />
-            <div>
-              <span className="font-bold">Coach Tip: </span>
-              <span>Focus on mastering <strong className="text-white">{level.concept}</strong>. Re-check the expected output or syntax syntax rule shown in the theory tab.</span>
+          <div className="flex items-start gap-3.5 rounded-2xl border border-amber-500/40 bg-gradient-to-r from-amber-950/40 via-yellow-950/20 to-slate-900/60 p-4 text-sm text-amber-200 shadow-lg animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-400/20 text-amber-300 shrink-0">
+              <Lightbulb size={18} />
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-black uppercase tracking-wider text-amber-400">
+                  Coach Guidance
+                </span>
+                <span className="text-[11px] text-slate-400 font-medium">
+                  {steps.length > 1 ? `Step ${currentStepIndex + 1} of ${steps.length}` : "Hint"}
+                </span>
+              </div>
+              <p className="leading-relaxed text-slate-200 text-sm whitespace-pre-line">
+                {getHintForStep(level, currentStep, currentStepIndex)}
+              </p>
             </div>
           </div>
         )}
