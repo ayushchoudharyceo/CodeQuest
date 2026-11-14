@@ -111,28 +111,47 @@ export default function LessonPage() {
   }
 
   return (
-    <main>
+    <main className="min-h-screen pb-24">
       <StatusHUD />
-      <div className="mx-auto max-w-3xl space-y-4 p-4">
-        <button
-          onClick={() => router.push("/")}
-          className="flex items-center gap-1 text-sm text-white/70 hover:text-white"
-        >
-          <ArrowLeft size={16} /> Skill Tree
-        </button>
+      <div className="mx-auto max-w-3xl space-y-6 p-4 sm:p-6">
+        {/* Top Navigation Bar */}
+        <div className="flex items-center justify-between gap-4">
+          <button
+            onClick={() => router.push("/")}
+            className="group flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-bold text-slate-300 transition hover:bg-white/10 hover:text-white hover:border-white/20 active:scale-95"
+          >
+            <ArrowLeft size={14} className="transition-transform group-hover:-translate-x-0.5" />
+            <span>Skill Tree</span>
+          </button>
 
-        {steps.length > 1 && (
-          <ProgressBar total={steps.length} currentIndex={currentStepIndex} passedSteps={passedSteps} />
-        )}
-
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wide text-quest-blue">
-            {level.tier} · {level.concept}
-          </p>
-          <h1 className="mt-1 text-xl font-extrabold">{level.title}</h1>
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-slate-400">
+            {level.id}
+          </span>
         </div>
 
-        <div key={`${level.id}-${currentStepIndex}`}>
+        {/* Progress Bar */}
+        {steps.length > 1 && (
+          <div className="rounded-2xl border border-white/5 bg-slate-900/60 p-3 shadow-sm">
+            <ProgressBar total={steps.length} currentIndex={currentStepIndex} passedSteps={passedSteps} />
+          </div>
+        )}
+
+        {/* Level Breadcrumb & Title */}
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-500/30 bg-sky-500/10 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-sky-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-sky-400 animate-pulse" />
+              {level.tier}
+            </span>
+            <span className="text-xs font-medium text-slate-400">· {level.concept}</span>
+          </div>
+          <h1 className="text-2xl font-black tracking-tight text-white sm:text-3xl">
+            {level.title}
+          </h1>
+        </div>
+
+        {/* Active Step Content */}
+        <div key={`${level.id}-${currentStepIndex}`} className="transition-all duration-300">
           {currentStep.kind === "theory" && (
             <TheoryCardStep step={currentStep} onPass={markCurrentStepPassed} />
           )}
@@ -166,58 +185,85 @@ export default function LessonPage() {
           )}
         </div>
 
-        <div className="flex items-center justify-between gap-3">
+        {/* Bottom Actions Bar */}
+        <div className="flex items-center justify-between gap-4 pt-2">
           <button
             onClick={() => {
               setHintOpen((v) => !v);
               useHint(level.id);
             }}
-            className="flex items-center gap-2 rounded-2xl border-b-4 border-yellow-700 bg-quest-yellow px-4 py-2 font-bold text-black active:border-b-0 active:translate-y-1"
+            className="flex items-center gap-2 rounded-2xl border-b-4 border-amber-600 bg-gradient-to-r from-amber-400 to-yellow-500 px-4 py-2.5 text-xs font-black uppercase tracking-wider text-slate-950 shadow-md shadow-amber-950/40 transition hover:brightness-110 active:border-b-0 active:translate-y-1"
           >
-            <Lightbulb size={18} /> Hint
+            <Lightbulb size={16} />
+            <span>Hint</span>
           </button>
 
           <button
             onClick={handleContinue}
             disabled={!canContinue}
-            className="flex items-center gap-2 rounded-2xl border-b-4 border-quest-greenDark bg-quest-green px-6 py-2 font-extrabold disabled:opacity-30 active:border-b-0 active:translate-y-1"
+            className="flex items-center gap-2 rounded-2xl border-b-4 border-emerald-700 bg-gradient-to-r from-emerald-500 to-green-600 px-7 py-3 text-sm font-black text-white shadow-lg shadow-emerald-950/40 transition hover:brightness-110 disabled:opacity-30 disabled:pointer-events-none active:border-b-0 active:translate-y-1"
           >
-            {isLastStep ? "Finish" : "Continue"} <ArrowRight size={18} />
+            <span>{isLastStep ? "Complete Lesson" : "Continue"}</span>
+            <ArrowRight size={18} />
           </button>
         </div>
 
+        {/* Hint Revelation Card */}
         {hintOpen && (
-          <div className="rounded-2xl bg-black/30 p-3 text-sm text-white/80">
-            Focus on: <span className="font-bold">{level.concept}</span>.
+          <div className="flex items-start gap-3 rounded-2xl border border-amber-500/30 bg-amber-950/30 p-4 text-sm text-amber-200">
+            <Lightbulb size={18} className="mt-0.5 shrink-0 text-amber-400" />
+            <div>
+              <span className="font-bold">Coach Tip: </span>
+              <span>Focus on mastering <strong className="text-white">{level.concept}</strong>. Re-check the expected output or syntax syntax rule shown in the theory tab.</span>
+            </div>
           </div>
         )}
       </div>
 
+      {/* Celebratory Completion Modal */}
       {showCompleteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <div className="w-full max-w-sm rounded-2xl border-b-4 border-quest-greenDark bg-quest-card p-6 text-center">
-            <PartyPopper className="mx-auto text-quest-yellow" size={40} />
-            <h2 className="mt-3 text-xl font-extrabold">Level Complete!</h2>
-            <p className="mt-1 text-sm text-white/70">
-              +{level.xp} XP earned for &ldquo;{level.title}&rdquo;
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+          <div className="w-full max-w-sm rounded-3xl border border-emerald-500/30 bg-gradient-to-b from-[#16222f] to-[#0c131b] p-6 text-center shadow-2xl">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-tr from-amber-400 to-yellow-500 text-slate-950 shadow-lg shadow-amber-500/30">
+              <PartyPopper size={32} />
+            </div>
+
+            <h2 className="mt-4 text-2xl font-black text-white">Lesson Mastered!</h2>
+            <p className="mt-1 text-sm text-slate-300">
+              &ldquo;{level.title}&rdquo; completed
             </p>
 
-            <div className="mt-5 flex flex-col gap-3">
+            {/* Rewards Card */}
+            <div className="mt-4 grid grid-cols-2 gap-2 rounded-2xl border border-white/5 bg-slate-900/60 p-3">
+              <div className="flex flex-col items-center">
+                <span className="text-xs font-bold text-slate-400">XP Gained</span>
+                <span className="text-lg font-black text-sky-400">+{level.xp} XP</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-xs font-bold text-slate-400">Coins</span>
+                <span className="text-lg font-black text-amber-400">
+                  +{hintsUsed || attempts > 0 ? "10" : "20"} 🪙
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-6 flex flex-col gap-2.5">
               {nextLevel ? (
                 <button
                   onClick={() => proceedTo(() => router.push(`/lesson/${nextLevel.id}`))}
-                  className="flex items-center justify-center gap-2 rounded-2xl border-b-4 border-quest-greenDark bg-quest-green px-5 py-2 font-extrabold active:border-b-0 active:translate-y-1"
+                  className="flex items-center justify-center gap-2 rounded-2xl border-b-4 border-emerald-700 bg-gradient-to-r from-emerald-500 to-green-600 px-5 py-3 font-black text-white shadow-lg shadow-emerald-950 transition hover:brightness-110 active:border-b-0 active:translate-y-1"
                 >
-                  Next Lesson <ArrowRight size={18} />
+                  <span>Next Lesson</span>
+                  <ArrowRight size={18} />
                 </button>
               ) : (
-                <p className="text-sm font-bold text-quest-yellow">
-                  You&apos;ve completed every level. Amazing work!
+                <p className="text-sm font-bold text-amber-400">
+                  You&apos;ve completed every level in CodeQuest!
                 </p>
               )}
               <button
                 onClick={() => proceedTo(() => router.push("/"))}
-                className="rounded-2xl border-b-4 border-black/30 bg-white/10 px-5 py-2 font-bold text-white/80 active:border-b-0 active:translate-y-1"
+                className="rounded-2xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-bold text-slate-300 transition hover:bg-white/10 hover:text-white active:scale-95"
               >
                 Back to Skill Tree
               </button>

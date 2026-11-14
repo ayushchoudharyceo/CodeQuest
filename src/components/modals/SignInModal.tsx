@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { Mail, ArrowRight, ShieldCheck } from "lucide-react";
 import Modal from "./Modal";
 import { useUserStore } from "@/store/useUserStore";
 
@@ -11,9 +12,6 @@ export default function SignInModal({ open, onClose }: { open: boolean; onClose:
   const [email, setEmail] = useState("");
 
   function handleGoogle() {
-    // Mocked: no Google OAuth client ID / backend session exchange exists in
-    // this frontend-only demo — a real integration would replace this with
-    // Google Identity Services and a server-side token exchange.
     signInWithGoogle("Guest Coder", "guest.coder@gmail.com");
     onClose();
   }
@@ -26,42 +24,46 @@ export default function SignInModal({ open, onClose }: { open: boolean; onClose:
   }
 
   return (
-    <Modal open={open} onClose={onClose} title="Save your progress">
-      <p className="text-sm text-white/70">
-        Sign in to keep your streak, coins, and XP safe across devices.
-      </p>
+    <Modal open={open} onClose={onClose} title="Save Your Progress" maxWidth="max-w-sm">
+      <div className="flex items-center gap-2 rounded-2xl border border-sky-500/20 bg-sky-950/20 p-3 text-xs text-sky-300">
+        <ShieldCheck size={18} className="shrink-0 text-sky-400" />
+        <span>Sync your streak, coins, XP, and wardrobe unlocked items safely.</span>
+      </div>
 
       <div className="mt-5 space-y-3">
         <button
           onClick={handleGoogle}
-          className="flex w-full items-center justify-center gap-3 rounded-2xl border-b-4 border-gray-300 bg-white px-4 py-3 font-bold text-gray-800 active:border-b-0 active:translate-y-1"
+          className="group flex w-full items-center justify-center gap-3 rounded-2xl border-b-4 border-slate-300 bg-white px-4 py-3 font-bold text-slate-800 shadow-md transition hover:bg-slate-50 active:border-b-0 active:translate-y-1"
         >
-          <GoogleBadge /> Continue with Google
+          <GoogleBadge />
+          <span>Continue with Google</span>
         </button>
 
         {!showEmailForm ? (
           <button
             onClick={() => setShowEmailForm(true)}
-            className="w-full rounded-2xl border-b-4 border-black/30 bg-white/10 px-4 py-3 font-bold text-white/80 active:border-b-0 active:translate-y-1"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-slate-800/60 px-4 py-3 text-sm font-bold text-slate-200 transition hover:bg-slate-800 hover:text-white active:scale-95"
           >
-            Continue with email
+            <Mail size={16} />
+            <span>Continue with Email</span>
           </button>
         ) : (
-          <form onSubmit={handleEmailSubmit} className="space-y-2">
+          <form onSubmit={handleEmailSubmit} className="space-y-2.5 pt-1">
             <input
               type="email"
               required
               autoFocus
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className="w-full rounded-xl border-b-4 border-black/30 bg-[#0d1417] px-4 py-3 text-white outline-none focus:border-quest-blue"
+              placeholder="name@example.com"
+              className="w-full rounded-2xl border border-white/10 bg-[#090d13] px-4 py-3 font-mono text-sm text-white outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400"
             />
             <button
               type="submit"
-              className="w-full rounded-2xl border-b-4 border-quest-greenDark bg-quest-green px-4 py-3 font-extrabold active:border-b-0 active:translate-y-1"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border-b-4 border-emerald-700 bg-gradient-to-r from-emerald-500 to-green-600 px-4 py-3 font-black text-white shadow-lg shadow-emerald-950 transition hover:brightness-110 active:border-b-0 active:translate-y-1"
             >
-              Continue
+              <span>Continue</span>
+              <ArrowRight size={16} />
             </button>
           </form>
         )}
@@ -69,7 +71,7 @@ export default function SignInModal({ open, onClose }: { open: boolean; onClose:
 
       <button
         onClick={onClose}
-        className="mt-4 w-full text-center text-xs text-white/50 hover:text-white/80"
+        className="mt-5 w-full text-center text-xs font-semibold text-slate-500 hover:text-slate-300 transition"
       >
         Maybe later — keep playing as guest
       </button>

@@ -8,7 +8,7 @@ export default function Modal({
   onClose,
   title,
   children,
-  maxWidth = "max-w-sm",
+  maxWidth = "max-w-md",
 }: {
   open: boolean;
   onClose: () => void;
@@ -20,21 +20,21 @@ export default function Modal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-in fade-in duration-200"
       onClick={onClose}
     >
       <div
-        className={`w-full ${maxWidth} max-h-[85vh] overflow-y-auto rounded-2xl border-b-4 border-black/30 bg-quest-card p-6`}
+        className={`w-full ${maxWidth} max-h-[85vh] overflow-y-auto rounded-3xl border border-white/10 bg-gradient-to-b from-[#182332] to-[#0e141c] p-6 shadow-2xl glass-card`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between gap-4">
-          {title && <h2 className="text-lg font-extrabold">{title}</h2>}
+        <div className="flex items-center justify-between gap-4 border-b border-white/5 pb-3">
+          {title && <h2 className="text-xl font-black text-white">{title}</h2>}
           <button
             onClick={onClose}
-            className="ml-auto text-white/60 transition hover:text-white"
+            className="ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-slate-400 transition hover:bg-white/15 hover:text-white active:scale-95"
             aria-label="Close"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
         <div className="mt-4">{children}</div>
