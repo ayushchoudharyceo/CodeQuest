@@ -22,7 +22,8 @@ export default function StatusHUD() {
   const close = () => setOpenModal(null);
 
   return (
-    <header className="sticky top-0 z-40 w-full glass-nav shadow-md shadow-black/20">
+    <>
+      <header className="sticky top-0 z-40 w-full glass-nav shadow-md shadow-black/20">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-2 px-3 py-2.5 sm:px-6">
         {/* Brand / Logo */}
         <Link
@@ -115,16 +116,17 @@ export default function StatusHUD() {
           )}
         </div>
       </div>
-
-      <SignInModal open={openModal === "signIn"} onClose={close} />
-      <WardrobeModal open={openModal === "wardrobe"} onClose={close} />
-      <StreakModal open={openModal === "streak"} onClose={close} />
-      <CoinBalanceModal
-        open={openModal === "coins"}
-        onClose={close}
-        onOpenWardrobe={() => setOpenModal("wardrobe")}
-      />
-      <LeagueModal open={openModal === "league"} onClose={close} />
     </header>
-  );
+
+    <SignInModal open={openModal === "signIn"} onClose={close} />
+    <WardrobeModal open={openModal === "wardrobe"} onClose={close} />
+    <StreakModal open={openModal === "streak"} onClose={close} />
+    <CoinBalanceModal
+      open={openModal === "coins"}
+      onClose={close}
+      onOpenWardrobe={() => setOpenModal("wardrobe")}
+    />
+    <LeagueModal open={openModal === "league"} onClose={close} />
+  </>
+);
 }
